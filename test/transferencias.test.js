@@ -6,8 +6,12 @@ const { obterToken } = require('../helpers/autenticacao')
 
 describe ('Transferências', () => {
     describe('POST /transferencias', () => {
+        let token
+
+        beforeEach (async () => {
+            token = await obterToken('julio.lima', '123456')
+        })
         it('Deve retornar 201 (sucesso) quando o valor da transferência for igual ou acima de R$ 10,00', async () => { 
-            const token = await obterToken('julio.lima', '123456')
             const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
@@ -24,7 +28,7 @@ describe ('Transferências', () => {
                  })
 
         it('Deve retornar 403 quando o usuário não tiver permissão', async () => { 
-            const token = await obterToken('junior.lima', '123456')
+            token = await obterToken('junior.lima', '123456')
             const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
@@ -42,7 +46,6 @@ describe ('Transferências', () => {
 
     
         it('Deve retornar 422 se houver a transferência for abaixo de R$ 10,00', async () => { 
-            const token = await obterToken('julio.lima', '123456')
             const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')

@@ -1,11 +1,13 @@
 const request = require('supertest');
 const { expect } = require('chai');
+require('dotenv').config()
+
 
 describe ('Transferências', () => {
     describe('POST /transferencias', () => {
         it('Deve retornar 201 (sucesso) quando o valor da transferência for igual ou acima de R$ 10,00', async () => { 
             //Capturar o token 
-            const respostaLogin = await request('http://localhost:3000')
+            const respostaLogin = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type', 'application/json')
                 .send({
@@ -15,7 +17,7 @@ describe ('Transferências', () => {
 
                 const token = respostaLogin.body.token; // Captura o token da resposta
 
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
                 .set ('Authorization', `Bearer ${token}`) // Adiciona o token no cabeçalho de autorização   
@@ -32,7 +34,7 @@ describe ('Transferências', () => {
 
         it('Deve retornar 403 quando o usuário não tiver permissão', async () => { 
             //Capturar o token 
-            const respostaLogin = await request('http://localhost:3000')
+            const respostaLogin = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type', 'application/json')
                 .send({
@@ -42,7 +44,7 @@ describe ('Transferências', () => {
 
                 const token = respostaLogin.body.token; // Captura o token da resposta
 
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
                 .set ('Authorization', `Bearer ${token}`) // Adiciona o token no cabeçalho de autorização   
@@ -59,8 +61,8 @@ describe ('Transferências', () => {
 
     
         it('Deve retornar 422 se houver a transferência for abaixo de R$ 10,00', async () => { 
-            //Capturar o token 
-            const respostaLogin = await request('http://localhost:3000')
+            //Capturar o token http://localhost:3000
+            const respostaLogin = await request(process.env.BASE_URL)
                 .post('/login')
                 .set('Content-Type', 'application/json')
                 .send({
@@ -70,7 +72,7 @@ describe ('Transferências', () => {
 
                 const token = respostaLogin.body.token; // Captura o token da resposta
 
-            const resposta = await request('http://localhost:3000')
+            const resposta = await request(process.env.BASE_URL)
                 .post('/transferencias')
                 .set('Content-Type', 'application/json')
                 .set ('Authorization', `Bearer ${token}`) // Adiciona o token no cabeçalho de autorização   
